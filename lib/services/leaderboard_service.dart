@@ -37,4 +37,17 @@ class LeaderboardService {
 
     return higherRankedUsers.docs.length + 1;
   }
+
+  // Get user stats
+  Future<Map<String, dynamic>?> getUserStats(String userId) async {
+    try {
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (!userDoc.exists) return null;
+
+      return userDoc.data();
+    } catch (e) {
+      print('Error getting user stats: \$e');
+      return null;
+    }
+  }
 }

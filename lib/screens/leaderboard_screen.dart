@@ -20,7 +20,7 @@ class LeaderboardScreen extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('Error: \${snapshot.error}'));
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
 
         final entries = snapshot.data ?? [];
@@ -45,7 +45,7 @@ class LeaderboardScreen extends StatelessWidget {
                 leading: CircleAvatar(
                   backgroundColor: _getRankColor(entry.rank),
                   child: Text(
-                    '\${entry.rank}',
+                    '${entry.rank}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -55,7 +55,8 @@ class LeaderboardScreen extends StatelessWidget {
                 title: Text(
                   entry.displayName,
                   style: TextStyle(
-                    fontWeight: isCurrentUser ? FontWeight.bold : FontWeight.normal,
+                    fontWeight:
+                        isCurrentUser ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
                 trailing: Row(
@@ -64,7 +65,7 @@ class LeaderboardScreen extends StatelessWidget {
                     const Icon(Icons.stars, color: Colors.amber),
                     const SizedBox(width: 4),
                     Text(
-                      '\${entry.totalPoints}',
+                      '${entry.totalPoints}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

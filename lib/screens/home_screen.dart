@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('Error: \${snapshot.error}'));
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
 
         final habits = snapshot.data ?? [];
@@ -117,14 +117,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         const Icon(Icons.local_fire_department,
                             size: 16, color: Colors.orange),
                         const SizedBox(width: 4),
-                        Text('Streak: \${habit.streak} days'),
+                        Text('Streak: ${habit.streak} days'),
                       ],
                     ),
                   ],
                 ),
                 trailing: IconButton(
                   icon: Icon(
-                    canComplete ? Icons.check_circle_outline : Icons.check_circle,
+                    canComplete
+                        ? Icons.check_circle_outline
+                        : Icons.check_circle,
                     color: canComplete ? Colors.grey : Colors.green,
                   ),
                   onPressed: canComplete

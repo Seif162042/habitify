@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,6 +26,32 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  String _getErrorMessage(dynamic error) {
+    if (error is FirebaseAuthException) {
+      switch (error.code) {
+        case 'user-not-found':
+          return 'No account found with this email. Please sign up first.';
+        case 'wrong-password':
+          return 'Incorrect password. Please try again.';
+        case 'invalid-email':
+          return 'Invalid email address format.';
+        case 'user-disabled':
+          return 'This account has been disabled.';
+        case 'email-already-in-use':
+          return 'An account already exists with this email.';
+        case 'weak-password':
+          return 'Password is too weak. Please use at least 6 characters.';
+        case 'operation-not-allowed':
+          return 'Email/password accounts are not enabled.';
+        case 'invalid-credential':
+          return 'Invalid email or password. Please check and try again.';
+        default:
+          return 'Authentication error: ${error.message ?? error.code}';
+      }
+    }
+    return 'An error occurred. Please try again.';
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -46,7 +73,11 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            content: Text(_getErrorMessage(e)),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 4),
+          ),
         );
       }
     } finally {
@@ -67,7 +98,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.track_changes, size: 80, color: Colors.deepPurple),
+                const Icon(Icons.track_changes,
+                    size: 80, color: Colors.deepPurple),
                 const SizedBox(height: 24),
                 Text(
                   'Habitify',
@@ -127,22 +159,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
+                  height: 48,
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _submit,
                     child: _isLoading
-                        ? const CircularProgressIndicator()
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
                         : Text(_isLogin ? 'Login' : 'Sign Up'),
                   ),
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    setState(() => _isLogin = !_isLogin);
+                    setState(() {
+                      _isLogin = !_isLogin;
+                      _formKey.currentState?.reset();
+                    });
                   },
                   child: Text(
                     _isLogin
-                        ? 'Don\'t have an account? Sign Up'
+                        ? "Don't have an account? Sign Up"
                         : 'Already have an account? Login',
                   ),
                 ),

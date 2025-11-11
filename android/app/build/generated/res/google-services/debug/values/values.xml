@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">128004902116-6knk7t6lm0drvcjggujl20b14g9n2ms3.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">128004902116</string>
+    <string name="google_api_key" translatable="false">AIzaSyCGAWZwGF75X7l9-a2CC_c4ZgLpYh8vfMw</string>
+    <string name="google_app_id" translatable="false">1:128004902116:android:2ff0891c9dcd250c46b0f1</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCGAWZwGF75X7l9-a2CC_c4ZgLpYh8vfMw</string>
+    <string name="google_storage_bucket" translatable="false">habitify-34d82.firebasestorage.app</string>
+    <string name="project_id" translatable="false">habitify-34d82</string>
+</resources>
