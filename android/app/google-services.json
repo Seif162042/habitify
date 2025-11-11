@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "128004902116",
+    "project_id": "habitify-34d82",
+    "storage_bucket": "habitify-34d82.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128004902116:android:2ff0891c9dcd250c46b0f1",
+        "android_client_info": {
+          "package_name": "com.example.habitify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128004902116-6knk7t6lm0drvcjggujl20b14g9n2ms3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGAWZwGF75X7l9-a2CC_c4ZgLpYh8vfMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128004902116-6knk7t6lm0drvcjggujl20b14g9n2ms3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "128004902116-5qcrdndsedc8d48koi10ihnjpld6tjv4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.habitify"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
