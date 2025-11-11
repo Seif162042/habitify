@@ -64,6 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '128004902116',
     projectId: 'habitify-34d82',
     storageBucket: 'habitify-34d82.firebasestorage.app',
+    iosClientId: '128004902116-5qcrdndsedc8d48koi10ihnjpld6tjv4.apps.googleusercontent.com',
     iosBundleId: 'com.example.habitify',
   );
 
@@ -73,6 +74,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '128004902116',
     projectId: 'habitify-34d82',
     storageBucket: 'habitify-34d82.firebasestorage.app',
+    iosClientId: '128004902116-5qcrdndsedc8d48koi10ihnjpld6tjv4.apps.googleusercontent.com',
     iosBundleId: 'com.example.habitify',
   );
 
@@ -85,4 +87,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'habitify-34d82.firebasestorage.app',
     measurementId: 'G-VMT9H9SERB',
   );
+
 }
