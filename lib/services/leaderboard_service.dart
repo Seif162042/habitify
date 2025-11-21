@@ -46,7 +46,7 @@ class LeaderboardService {
 
       return userDoc.data();
     } catch (e) {
-      print('Error getting user stats: \$e');
+      print('Error getting user stats: $e');
       return null;
     }
   }

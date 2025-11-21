@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/leaderboard_entry.dart';
-import '../services/leaderboard_service.dart';
-import '../services/auth_service.dart';
 
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final leaderboardService = LeaderboardService();
-    final authService = AuthService();
-    final currentUserId = authService.currentUser?.uid ?? '';
-
-    return StreamBuilder<List<LeaderboardEntry>>(
-      stream: leaderboardService.getLeaderboard(limit: 20),
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .orderBy('points', descending: true)
+          .limit(50)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -23,29 +22,34 @@ class LeaderboardScreen extends StatelessWidget {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
 
-        final entries = snapshot.data ?? [];
-
-        if (entries.isEmpty) {
-          return const Center(
-            child: Text('No users on the leaderboard yet!'),
-          );
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('No users yet'));
         }
+
+        final entries = snapshot.data!.docs.map((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          return LeaderboardEntry(
+            userId: doc.id,
+            displayName: data['displayName'] ?? 'Unknown',
+            points: data['points'] ?? 0,
+            totalHabitsCompleted: data['totalHabitsCompleted'] ?? 0,
+          );
+        }).toList();
 
         return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: entries.length,
           itemBuilder: (context, index) {
             final entry = entries[index];
-            final isCurrentUser = entry.userId == currentUserId;
+            final rank = index + 1;
 
             return Card(
-              color: isCurrentUser ? Colors.deepPurple.shade50 : null,
-              margin: const EdgeInsets.only(bottom: 8),
+              margin: const EdgeInsets.only(bottom: 12),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: _getRankColor(entry.rank),
+                  backgroundColor: _getRankColor(rank),
                   child: Text(
-                    '${entry.rank}',
+                    '$rank',
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -54,20 +58,20 @@ class LeaderboardScreen extends StatelessWidget {
                 ),
                 title: Text(
                   entry.displayName,
-                  style: TextStyle(
-                    fontWeight:
-                        isCurrentUser ? FontWeight.bold : FontWeight.normal,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  '${entry.totalHabitsCompleted} habits completed',
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.stars, color: Colors.amber),
+                    const Icon(Icons.star, color: Colors.amber, size: 20),
                     const SizedBox(width: 4),
                     Text(
-                      '${entry.totalPoints}',
+                      '${entry.points}',
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

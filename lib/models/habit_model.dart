@@ -1,34 +1,40 @@
-class HabitModel {
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class Habit {
   final String id;
   final String userId;
   final String name;
   final String description;
-  final String frequency;
-  final DateTime createdAt;
   final int streak;
-  final DateTime? lastCompletedDate;
+  final Timestamp? lastCompletedDate;
+  final DateTime createdAt;
+  final int reminderHour;
+  final int reminderMinute;
 
-  HabitModel({
+  Habit({
     required this.id,
     required this.userId,
     required this.name,
     required this.description,
-    required this.frequency,
-    required this.createdAt,
-    this.streak = 0,
+    required this.streak,
     this.lastCompletedDate,
+    required this.createdAt,
+    this.reminderHour = 9,
+    this.reminderMinute = 0,
   });
 
-  factory HabitModel.fromMap(Map<String, dynamic> map, String id) {
-    return HabitModel(
-      id: id,
-      userId: map['userId'] ?? '',
-      name: map['name'] ?? '',
-      description: map['description'] ?? '',
-      frequency: map['frequency'] ?? 'daily',
-      createdAt: map['createdAt']?.toDate() ?? DateTime.now(),
-      streak: map['streak'] ?? 0,
-      lastCompletedDate: map['lastCompletedDate']?.toDate(),
+  factory Habit.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return Habit(
+      id: doc.id,
+      userId: data['userId'] ?? '',
+      name: data['name'] ?? '',
+      description: data['description'] ?? '',
+      streak: data['streak'] ?? 0,
+      lastCompletedDate: data['lastCompletedDate'],
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      reminderHour: data['reminderHour'] ?? 9,
+      reminderMinute: data['reminderMinute'] ?? 0,
     );
   }
 
@@ -37,32 +43,11 @@ class HabitModel {
       'userId': userId,
       'name': name,
       'description': description,
-      'frequency': frequency,
-      'createdAt': createdAt,
       'streak': streak,
       'lastCompletedDate': lastCompletedDate,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'reminderHour': reminderHour,
+      'reminderMinute': reminderMinute,
     };
-  }
-
-  HabitModel copyWith({
-    String? id,
-    String? userId,
-    String? name,
-    String? description,
-    String? frequency,
-    DateTime? createdAt,
-    int? streak,
-    DateTime? lastCompletedDate,
-  }) {
-    return HabitModel(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      frequency: frequency ?? this.frequency,
-      createdAt: createdAt ?? this.createdAt,
-      streak: streak ?? this.streak,
-      lastCompletedDate: lastCompletedDate ?? this.lastCompletedDate,
-    );
   }
 }

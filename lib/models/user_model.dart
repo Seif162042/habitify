@@ -1,25 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String id;
   final String email;
   final String displayName;
-  final int totalPoints;
+  final int points;
+  final int totalHabitsCompleted;
   final DateTime createdAt;
 
   UserModel({
     required this.id,
     required this.email,
     required this.displayName,
-    this.totalPoints = 0,
+    required this.points,
+    required this.totalHabitsCompleted,
     required this.createdAt,
   });
 
-  factory UserModel.fromMap(Map<String, dynamic> map, String id) {
+  factory UserModel.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
     return UserModel(
-      id: id,
-      email: map['email'] ?? '',
-      displayName: map['displayName'] ?? '',
-      totalPoints: map['totalPoints'] ?? 0,
-      createdAt: map['createdAt']?.toDate() ?? DateTime.now(),
+      id: doc.id,
+      email: data['email'] ?? '',
+      displayName: data['displayName'] ?? '',
+      points: data['points'] ?? 0,
+      totalHabitsCompleted: data['totalHabitsCompleted'] ?? 0,
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
     );
   }
 
@@ -27,8 +33,9 @@ class UserModel {
     return {
       'email': email,
       'displayName': displayName,
-      'totalPoints': totalPoints,
-      'createdAt': createdAt,
+      'points': points,
+      'totalHabitsCompleted': totalHabitsCompleted,
+      'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 }

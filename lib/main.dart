@@ -4,12 +4,27 @@ import 'firebase_options.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'services/auth_service.dart';
+import 'services/local_storage.dart';
+import 'services/notification_service.dart';
+import 'services/step_counter_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize LocalStorage (CRITICAL - fixes the LateInitializationError)
+  await LocalStorageService.initialize();
+
+  // Initialize Notification Service
+  await NotificationService.initialize();
+
+  // Initialize Step Counter Service
+  await StepCounterService.initialize();
+
   runApp(const MyApp());
 }
 
